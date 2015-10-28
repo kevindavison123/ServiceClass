@@ -15,23 +15,21 @@ import java.util.HashMap;
 /**
  * Created by kevin on 10/27/2015.
  */
-public class PostAsync extends AsyncTask<String, String, JSONObject>
+public class LoginPostAsync extends AsyncTask<String, String, JSONObject>
 {
+    Context context = App.getContext();
     JSONParser jsonParser = new JSONParser();
-    private static final String LOGIN_URL = "this needs to be implemented in PHP";
+    private static final String LOGIN_URL = "this needs to be implemented";
     private static final String TAG_SUCESS = "success";
     private static final String TAG_MESSAGE = "message";
-    public  PostAsync(Context content)
-    {
-        onPreExecute(content);
-    }
+
 
 
     private ProgressDialog pDialog;
 
-    protected void onPreExecute(Context content)
+    protected void onPreExecute()
     {
-        pDialog = new ProgressDialog(content);
+        pDialog = new ProgressDialog(context);
         pDialog.setMessage("Attempting login...");
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(true);
@@ -43,6 +41,7 @@ public class PostAsync extends AsyncTask<String, String, JSONObject>
     protected JSONObject doInBackground(String... args)
     {
         try {
+
             HashMap<String, String> params = new HashMap<>();
             params.put("name", args[0]);
             params.put("password", args[1]);
@@ -72,7 +71,7 @@ public class PostAsync extends AsyncTask<String, String, JSONObject>
         }
         if(json != null)
         {
-            Toast.makeText(LoginMain.this, json.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, json.toString(), Toast.LENGTH_LONG).show();
             try {
                 success = json.getInt(TAG_SUCESS);
                 message = json.getString(TAG_MESSAGE);
@@ -91,4 +90,4 @@ public class PostAsync extends AsyncTask<String, String, JSONObject>
 
     }
 }
-}
+

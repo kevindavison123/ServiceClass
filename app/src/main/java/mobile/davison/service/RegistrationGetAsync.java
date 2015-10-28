@@ -14,7 +14,7 @@ import java.util.HashMap;
 /**
  * Created by Kevin on 10/28/2015.
  */
-public class RegistratoinGetAsync extends AsyncTask<String, String, JSONObject> {
+public class RegistrationGetAsync extends AsyncTask<String, String, JSONObject> {
 
     Context context = App.getContext();
     JSONParser jsonParser = new JSONParser();
@@ -39,10 +39,12 @@ public class RegistratoinGetAsync extends AsyncTask<String, String, JSONObject> 
 
         try {
 
-            //NEEDS TO BE MODIFIED
+
             HashMap<String, String> params = new HashMap<>();
-            params.put("name", args[0]);
-            params.put("password", args[1]);
+            params.put("fname", args[0]);
+            params.put("lname", args[1]);
+            params.put("email", args[2]);
+            params.put("password", args[3]);
 
             Log.d("request", "starting");
 

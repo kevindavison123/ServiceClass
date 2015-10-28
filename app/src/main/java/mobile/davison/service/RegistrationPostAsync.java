@@ -41,8 +41,10 @@ public class RegistrationPostAsync extends AsyncTask<String, String, JSONObject>
         try {
 
             HashMap<String, String> params = new HashMap<>();
-            params.put("name", args[0]);
-            params.put("password", args[1]);
+            params.put("fname", args[0]);
+            params.put("lname", args[1]);
+            params.put("email", args[2]);
+            params.put("password", args[3]);
 
             Log.d("request", "starting");
 

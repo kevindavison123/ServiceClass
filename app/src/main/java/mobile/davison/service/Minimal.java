@@ -7,6 +7,8 @@ import android.view.MenuItem;
 
 public class Minimal extends AppCompatActivity {
 
+    private String tag = "Login";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

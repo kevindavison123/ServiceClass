@@ -17,9 +17,16 @@ import java.util.HashMap;
  */
 public class LoginPostAsync extends AsyncTask<String, String, JSONObject>
 {
+    private static String KEY_UID = "uid";
+    private static String KEY_FIRSTNAME = "fname";
+    private static String KEY_LASTNAME = "lname";
+    private static String KEY_EMAIL = "email";
+    private static String KEY_CREATED_AT = "created_at";
+
+
+
     Context context = App.getContext();
     JSONParser jsonParser = new JSONParser();
-    private static final String LOGIN_URL = "this needs to be implemented";
     private static final String TAG_SUCESS = "success";
     private static final String TAG_MESSAGE = "message";
 
@@ -42,14 +49,8 @@ public class LoginPostAsync extends AsyncTask<String, String, JSONObject>
     {
         try {
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put("name", args[0]);
-            params.put("password", args[1]);
-
-            Log.d("request", "starting");
-
-            JSONObject json = jsonParser.makeHttpRequest(LOGIN_URL, "POST", params);
-
+           UserFunction userFunction = new UserFunction();
+            JSONObject json = userFunction.loginPostUser(args[0],args[1]);
             if (json != null) {
                 Log.d("JSON result", json.toString());
                 return json;
@@ -60,8 +61,7 @@ public class LoginPostAsync extends AsyncTask<String, String, JSONObject>
         }
         return null;
     }
-    protected void onPostExecute(JSONObject json)
-    {
+    protected void onPostExecute(JSONObject json) {
         int success = 0;
         String message ="";
 
@@ -75,6 +75,12 @@ public class LoginPostAsync extends AsyncTask<String, String, JSONObject>
             try {
                 success = json.getInt(TAG_SUCESS);
                 message = json.getString(TAG_MESSAGE);
+                JSONObject json_user = json.getJSONObject("user");
+                DatabaseHandler db = new DatabaseHandler(context);
+                UserFunction logout = new UserFunction();
+                //clear all previous data in SQlite database
+                logout.logoutUser(context);
+                db.addUser(json_user.getString(KEY_FIRSTNAME), json_user.getString(KEY_LASTNAME), json_user.getString(KEY_EMAIL), json_user.getString(KEY_UID), json_user.getString(KEY_CREATED_AT));
             } catch (JSONException e)
             {
                 e.printStackTrace();
@@ -85,7 +91,7 @@ public class LoginPostAsync extends AsyncTask<String, String, JSONObject>
             Log.d("Success!", message);
         }
         else{
-            Log.d("Faileure!", message);
+            Log.d("Failure!", message);
         }
 
     }

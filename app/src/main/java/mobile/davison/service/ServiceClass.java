@@ -6,40 +6,37 @@ package mobile.davison.service;
  */
 public class ServiceClass {
 
-    public ServiceClass(String tag, String...args)
-    {
+    public ServiceClass(){}
 
-    }
-
-    private  void loginPost(String password, String username)
+    public  void loginPost(String password, String username)
     {
         LoginPostAsync post = new LoginPostAsync();
         post.execute(password, username);
     }
 
-    private  void loginGet(String password, String username)
+    public  void loginGet(String password, String username)
     {
         LoginGetAsync get = new LoginGetAsync();
         get.execute(password, username);
     }
 
-    private void registrationPost()
+    public void registrationPost()
     {
         RegistrationPostAsync post = new RegistrationPostAsync();
         post.execute();
     }
 
-    private void registrationGet()
+    public void registrationGet()
     {
         RegistrationGetAsync get = new RegistrationGetAsync();
         get.execute();
     }
-    private void formPost()
+    public void formPost()
     {
         FormPostAsync post = new FormPostAsync();
         post.execute();
     }
-    private void formGet()
+    public void formGet()
     {
         FormGetAsync get = new FormGetAsync();
         get.execute();

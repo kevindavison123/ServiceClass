@@ -51,10 +51,8 @@ public class Minimal extends AppCompatActivity {
             public void onClick(View v) {
                 if(!uname.getText().toString().equals("") && !password.getText().toString().equals(""))
                 {
-                    new LoginGetAsync().execute(uname.getText().toString(),password.getText().toString());
-
-                    new LoginPostAsync().execute(uname.getText().toString(),password.getText().toString());
-
+                    LoginGetAsync get = new LoginGetAsync();
+                    get.execute(uname.getText().toString(),password.getText().toString());
                 }
                 if(uname.getText().toString().equals("") && password.getText().toString().equals(""))
                 {
@@ -72,9 +70,9 @@ public class Minimal extends AppCompatActivity {
         });
 
         //I'm just calling it automatically here rn. It should be called on a button press but one thing at a time
-        String username = "testuser";
-        String password = "testpass";
-        new LoginGetAsync().execute(username, password);
+//        String username = "testuser";
+//        String password = "testpass";
+//        new LoginGetAsync().execute(username, password);
     }
 
     @Override

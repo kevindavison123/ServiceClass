@@ -37,7 +37,7 @@ public class LoginPostAsync extends AsyncTask<String, String, JSONObject>
     protected void onPreExecute()
     {
         pDialog = new ProgressDialog(context);
-        pDialog.setMessage("Attempting login...");
+        pDialog.setMessage("Attempting Submission...");
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(true);
         pDialog.show();

@@ -21,7 +21,7 @@ public class LoginGetAsync extends AsyncTask<String, String, JSONObject> {
 
         private ProgressDialog pDialog;
 
-        private static final String LOGIN_URL = "gotta implement this url";
+        private static final String LOGIN_URL = "http://10.0.3.2:8080/";
         private static final String TAG_SUCCESS = "success";
         private static final String TAG_MESSAGE = "message";
 
@@ -39,14 +39,17 @@ public class LoginGetAsync extends AsyncTask<String, String, JSONObject> {
 
             try {
 
+                //We don't need params really... Only the last part is a param and i harcoded it for
+                //now because i couldn't get it to format right....
                 HashMap<String, String> params = new HashMap<>();
-                params.put("name", args[0]);
-                params.put("password", args[1]);
+//                params.put("name", args[0]);
+//                params.put("password", args[1]);
 
                 Log.d("request", "starting");
 
+                //Debug it here and you can see what has been returned in the JSON object
                 JSONObject json = jsonParser.makeHttpRequest(
-                        LOGIN_URL, "GET", params);
+                        LOGIN_URL + "test/event/3", "GET", params);
 
                 if (json != null) {
                     Log.d("JSON result", json.toString());

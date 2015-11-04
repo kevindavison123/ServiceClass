@@ -21,7 +21,7 @@ public class RegistrationGetAsync extends AsyncTask<String, String, JSONObject> 
 
     private ProgressDialog pDialog;
 
-    private static final String REGISTRATION_URL = "gotta implement this url";
+    private static final String REGISTRATION_URL = "http://10.0.3.2:8080/";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
 

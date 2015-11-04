@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 /**
  * Created by Kevin on 10/28/2015.
+ * This class is actually not used and should be deleted. But is a nice reference.
  */
 public class UserFunction
 {

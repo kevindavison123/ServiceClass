@@ -44,7 +44,7 @@ public class Registration extends AppCompatActivity {
                         post.execute(firstName.getText().toString(), lastName.getText().toString(),email.getText().toString(),password.getText().toString());
                     }
                     else
-                        Toast.makeText(getApplicationContext(), "passwords do not match", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
                 }
                 if(firstName.getText().toString().equals(""))
                 {
@@ -57,7 +57,7 @@ public class Registration extends AppCompatActivity {
                 }
                 if(email.getText().toString().equals(""))
                 {
-                    Toast.makeText(getApplicationContext(), "email is  empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Email is  empty", Toast.LENGTH_SHORT).show();
                 }
             }
         });

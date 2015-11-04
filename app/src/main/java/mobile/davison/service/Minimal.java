@@ -70,9 +70,9 @@ public class Minimal extends AppCompatActivity {
         });
 
         //I'm just calling it automatically here rn. It should be called on a button press but one thing at a time
-//        String username = "testuser";
-//        String password = "testpass";
-//        new LoginGetAsync().execute(username, password);
+        String username = "testuser";
+        String password = "testpass";
+        new LoginGetAsync().execute(username, password);
     }
 
     @Override

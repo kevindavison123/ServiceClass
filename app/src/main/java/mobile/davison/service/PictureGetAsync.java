@@ -12,18 +12,19 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 /**
- * Created by Kevin on 10/28/2015.
+ * Created by kevin on 11/3/2015.
+ * This is kinda wrong because this just needs to go up to a server and be placed into a folder so no JSONObject is needed
  */
-public class FormGetAsync extends AsyncTask<String, String, JSONObject> {
+public class PictureGetAsync extends AsyncTask<String, String, JSONObject> {
 
     Context context = App.getContext();
     JSONParser jsonParser = new JSONParser();
 
     private ProgressDialog pDialog;
 
-    private static final String FORM_URL = "http://10.0.3.2:8080/";
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_MESSAGE = "message";
+    private static final java.lang.String FORM_URL = "http://10.0.3.2:8080/";
+    private static final java.lang.String TAG_SUCCESS = "success";
+    private static final java.lang.String TAG_MESSAGE = "message";
 
     @Override
     protected void onPreExecute() {
@@ -35,17 +36,17 @@ public class FormGetAsync extends AsyncTask<String, String, JSONObject> {
     }
 
     @Override
-    protected JSONObject doInBackground(String... args) {
+    protected org.json.JSONObject doInBackground(java.lang.String... args) {
 
         try {
             //THIS NEEDS TO BE CHANGED
-            HashMap<String, String> params = new HashMap<>();
+            HashMap<java.lang.String, java.lang.String> params = new HashMap<>();
             params.put("name", args[0]);
-            params.put("password", args[1]);
+            params.put("image", args[1]);
 
             Log.d("request", "starting");
 
-            JSONObject json = jsonParser.makeHttpRequest(
+            org.json.JSONObject json = jsonParser.makeHttpRequest(
                     FORM_URL, "GET", params);
 
             if (json != null) {
@@ -61,10 +62,10 @@ public class FormGetAsync extends AsyncTask<String, String, JSONObject> {
         return null;
     }
 
-    protected void onPostExecute(JSONObject json) {
+    protected void onPostExecute(org.json.JSONObject json) {
 
         int success = 0;
-        String message = "";
+        java.lang.String message = "";
 
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.dismiss();

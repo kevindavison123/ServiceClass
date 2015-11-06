@@ -70,16 +70,22 @@
             android:id="@+id/editText" />
 
 
+        <!--
+         This is unused in project 2 but will be later used in the final EventApp project
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/imgView"
             />
+            -->
+        <!--
+         This is unused in project 2 but will be later used in the final EventApp project
         <Button
             android:id="@+id/loadImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Upload Picture" />
+            -->
         <Button
             android:id="@+id/submitButton"
             android:layout_gravity="center"

@@ -34,8 +34,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,53 +56,92 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+/*
+This IS used for project 2 all commented code is to be used in EventApp but NOT in project 2 to get rid of confusion.
+ */
 
 public class SubmitTest extends AppCompatActivity {
-    Button buttonLoadImage;
-    ImageView uploadImage;
+//    Button buttonLoadImage;
+//    ImageView uploadImage;
     Button submitButton;
+    EditText name;
+    EditText subject;
     EditText groupName;
-    private static int RESULT_LOAD_IMAGE = 1;
+    DatePicker date;
+    TimePicker time;
+    EditText description;
+//    private static int RESULT_LOAD_IMAGE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         setContentView(R.layout.activity_submit_test);
+        name = (EditText) findViewById(R.id.yourName);
         groupName = (EditText) findViewById(R.id.groupName);
-        uploadImage = (ImageView) findViewById(R.id.imgView);
+        subject = (EditText) findViewById(R.id.subjectName);
+        date = (DatePicker) findViewById(R.id.datePicker);
+        time = (TimePicker) findViewById(R.id.timePicker);
+        description = (EditText) findViewById(R.id.editText);
+        //uploadImage = (ImageView) findViewById(R.id.imgView);
         submitButton = (Button) findViewById(R.id.submitButton);
-        buttonLoadImage =(Button) findViewById(R.id.loadImageButton);
-        buttonLoadImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
-            }
-        });
+        //buttonLoadImage =(Button) findViewById(R.id.loadImageButton);
+//        buttonLoadImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(i, RESULT_LOAD_IMAGE);
+//            }
+//        });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                Date date = new Date();
-                Bitmap image = ((BitmapDrawable) uploadImage.getDrawable()).getBitmap();
-                String name = groupName.getText().toString() + dateFormat.format(date);
-                    upload(image,name);
+
+              String getName =  name.getText().toString();
+                String getGroupName = groupName.getText().toString();
+                String getSubject = subject.getText().toString();
+               int day =  date.getDayOfMonth();
+                int month = date.getMonth();
+                int year = date.getYear();
+                String theDate = month + 1 + "/" + day + "/" + year;
+                int hour = time.getCurrentHour();
+                int minute = time.getCurrentMinute();
+                String minutes = String.valueOf(minute);
+                if(hour > 12)
+                {
+                    hour = time.getCurrentHour()-12;
+                }
+                if(minute < 10)
+                {
+                    minutes = "0" + minutes;
+                }
+                String theTime = hour + ":" + minutes;
+                String getDescription = description.getText().toString();
+                FormPostAsync post = new FormPostAsync();
+                new ServiceClass().formPost(getName,getGroupName,getSubject,theDate,theTime,getDescription);
+
+
+                Toast.makeText(SubmitTest.this, "Event created ",
+                        Toast.LENGTH_LONG).show();
+
+//                Bitmap image = ((BitmapDrawable) uploadImage.getDrawable()).getBitmap();
+//                String name = groupName.getText().toString() + dateFormat.format(date);
+//                    upload(image,name);
 
             }
         });
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode,Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data)
-        {
-            Uri selectedImage = data.getData();
-            uploadImage.setImageURI(selectedImage);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode,Intent data)
+//    {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data)
+//        {
+//            Uri selectedImage = data.getData();
+//            uploadImage.setImageURI(selectedImage);
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,19 +159,19 @@ public class SubmitTest extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void upload(Bitmap image, String name)
-    {
-        PicturePostAsync imagePost = new PicturePostAsync();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-        String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(),Base64.DEFAULT);
-        imagePost.execute(encodedImage,name);
-    }
-    public void back()
-    {
-        Intent intent = new Intent(SubmitTest.this, Minimal.class);
-        SubmitTest.this.startActivity(intent);
-    }
+//    private void upload(Bitmap image, String name)
+//    {
+//        PicturePostAsync imagePost = new PicturePostAsync();
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        image.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+//        String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(),Base64.DEFAULT);
+//        imagePost.execute(encodedImage,name);
+//    }
+//    public void back()
+//    {
+//        Intent intent = new Intent(SubmitTest.this, Minimal.class);
+//        SubmitTest.this.startActivity(intent);
+//    }
 
 
 }

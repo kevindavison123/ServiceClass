@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,10 +15,10 @@ import java.util.HashMap;
 /**
  * Created by Kevin on 10/28/2015.
  */
-public class FormPostAsync extends AsyncTask<String, String, JSONObject>
+public class FormPostAsync extends AsyncTask<String, String, JSONArray>
 {
     Context context = App.getContext();
-    JSONParser jsonParser = new JSONParser();
+    JSONArrayParser jsonParser = new JSONArrayParser();
     private static final String LOGIN_URL = "this needs to be implemented";
     private static final String TAG_SUCESS = "success";
     private static final String TAG_MESSAGE = "message";
@@ -37,17 +38,21 @@ public class FormPostAsync extends AsyncTask<String, String, JSONObject>
 
 
     @Override
-    protected JSONObject doInBackground(String... args)
+    protected JSONArray doInBackground(String... args)
     {
         try {
 
             HashMap<String, String> params = new HashMap<>();
             params.put("name", args[0]);
-            params.put("password", args[1]);
+            params.put("group", args[1]);
+            params.put("subject", args[2]);
+            params.put("date", args[3]);
+            params.put("time", args[4]);
+            params.put("description", args[5]);
 
             Log.d("request", "starting");
 
-            JSONObject json = jsonParser.makeHttpRequest(LOGIN_URL, "POST", params);
+            JSONArray json = jsonParser.makeHttpRequest(LOGIN_URL, "POST", params);
 
             if (json != null) {
                 Log.d("JSON result", json.toString());

@@ -2,6 +2,7 @@ package mobile.davison.service;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,11 +17,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by kevin on 10/27/2015.
  */
-public class JSONParser {
+public class JSONArrayParser {
 
 
         String charset = "UTF-8";
@@ -28,16 +30,16 @@ public class JSONParser {
         DataOutputStream wr;
         StringBuilder result = new StringBuilder();
         URL urlObj;
-        JSONObject jObj = null;
+        JSONArray jArr = null;
         StringBuilder sbParams;
         String paramsString;
 
 
-        public JSONParser() {
+        public JSONArrayParser() {
 
         }
 
-        public JSONObject makeHttpRequest(String url, String method, HashMap<String, String> params) {
+        public JSONArray makeHttpRequest(String url, String method, HashMap<String, String> params) {
             sbParams = new StringBuilder();
             int i = 0;
             for (String key : params.keySet()) {
@@ -97,6 +99,7 @@ public class JSONParser {
                 while ((line = reader.readLine()) != null) {
                     result.append(line);
                 }
+
                 Log.d("JSON Parser", "result: " + result.toString());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -107,12 +110,14 @@ public class JSONParser {
             //try to pare the string to a JSON object
 
             try {
-                jObj = new JSONObject(result.toString());
+                jArr = new JSONArray(result.toString());
+                Log.d("JSON Parser array", jArr.toString());
+
 
             } catch (JSONException e) {
                 Log.e("JSON Parser", "Error parsing data " + e.toString());
             }
-            return jObj;
+            return jArr;
 
         }
     }

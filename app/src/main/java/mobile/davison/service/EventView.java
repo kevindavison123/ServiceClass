@@ -51,7 +51,7 @@ public class EventView extends AppCompatActivity{
                     }
                 };
                 get.execute();
-                JSONArray jsonArray =
+                JSONArray jsonArray = serviceClass.getEvents();
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     String object = "";

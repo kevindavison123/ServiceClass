@@ -74,21 +74,21 @@ public class ServiceClass {
 
 
     public JSONArray getEvents() {
-        FormGetAsync get = new FormGetAsync() {
-            @Override
-            public void receiveData(Object result) {
-                Log.d("ServiceClass", "Does this happen?");
-                recieveJSON(result);
-
-            }
-
-            @Override
-            public void recieveData(Object object) {
-                Log.d("ServiceClass", "Did this happen?");
-                recieveJSON(object);
-            }
-        };
-        get.execute();
+//        FormGetAsync get = new FormGetAsync() {
+//            @Override
+//            public void receiveData(Object result) {
+//                Log.d("ServiceClass", "Does this happen?");
+//                recieveJSON(result);
+//
+//            }
+//
+//            @Override
+//            public void recieveData(Object object) {
+//                Log.d("ServiceClass", "Did this happen?");
+//                recieveJSON(object);
+//            }
+//        };
+//        get.execute();
         Log.d("get events ", jsonArray.toString());
         return this.jsonArray;
     }

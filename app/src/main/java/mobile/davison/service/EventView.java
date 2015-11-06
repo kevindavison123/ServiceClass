@@ -17,11 +17,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class EventView extends AppCompatActivity{
     final ServiceClass serviceClass = new ServiceClass();
+    private JSONArray jsonArray;
+
 
 
 
@@ -41,19 +44,19 @@ public class EventView extends AppCompatActivity{
                     @Override
                     public void receiveData(Object result) {
                         Log.d("ServiceClass", "Does this happen?");
-                         serviceClass.recieveJSON(result);
+                         recieveJSON(result);
 
                     }
 
                     @Override
                     public void recieveData(Object object) {
                         Log.d("ServiceClass", "Did this happen?");
-                        serviceClass.recieveJSON(object);
+                        recieveJSON(object);
                     }
                 };
                 get.execute();
 
-                List<String> stringList = serviceClass.setJsonArray();
+                List<String> stringList = setJsonArray(jsonArray);
             }
         });
      }
@@ -78,6 +81,49 @@ public class EventView extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void recieveJSON(Object result) {
+        Log.d("Event CLASS", "GET HERE");
+        if (JSONArray.class.isAssignableFrom(result.getClass()))
+        {
+
+            this.jsonArray = (JSONArray) result;
+
+            Log.d("Receive Json", jsonArray.toString());
+
+            setJsonArray(this.jsonArray);
+        }
+
+
+    }
+
+    public  List<String> setJsonArray(JSONArray json)
+    {
+        List<String> stringList = new ArrayList<>();
+        this.jsonArray = json;
+        Log.d(" Event class Set Json", jsonArray.toString());
+        for(int i =0; i<jsonArray.length(); i++)
+        {
+            try {
+                JSONObject jObj= jsonArray.getJSONObject(i);
+
+                Log.d("Object", jObj.toString());
+                Iterator<String> it = jObj.keys();
+                while(it.hasNext())
+                {
+                    String stringId = it.next();
+                    String value = jObj.get(stringId).toString();
+                    Log.d("String", stringId);
+                    Log.d("String", value);
+                    stringList.add(value);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return stringList;
     }
 
 //    @Override

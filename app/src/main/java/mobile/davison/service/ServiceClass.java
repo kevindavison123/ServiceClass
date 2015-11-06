@@ -52,54 +52,5 @@ public class ServiceClass {
         post.execute(args);
     }
 
-    public void recieveJSON(Object result) {
-        Log.d("SERVICE CLASS", "GET HERE");
-        if (JSONArray.class.isAssignableFrom(result.getClass()))
-        {
 
-            this.jsonArray = (JSONArray) result;
-
-            Log.d("Receive Json", jsonArray.toString());
-
-            setJsonArray(this.jsonArray);
-        }
-
-
-    }
-
-    public  List<String> setJsonArray(JSONArray json)
-    {
-        List<String> stringList = new ArrayList<>();
-        this.jsonArray = json;
-        Log.d("Set Json", jsonArray.toString());
-        for(int i =0; i<jsonArray.length(); i++)
-        {
-            try {
-                JSONObject jObj= jsonArray.getJSONObject(i);
-
-                Log.d("Object", jObj.toString());
-                Iterator<String> it = jObj.keys();
-                while(it.hasNext())
-                {
-                    String stringId = it.next();
-                    String value = jObj.get(stringId).toString();
-                    Log.d("String", stringId);
-                    Log.d("String", value);
-                    stringList.add(value);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return stringList;
-    }
-
-
-
-
-    public JSONArray getEvents() {
-        Log.d("get events ", this.jsonArray.toString());
-        return this.jsonArray;
-    }
 }

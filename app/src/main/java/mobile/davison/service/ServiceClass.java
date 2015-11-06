@@ -4,8 +4,11 @@ import android.telecom.Call;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -53,7 +56,7 @@ public class ServiceClass {
         Log.d("SERVICE CLASS", "GET HERE");
         if (JSONArray.class.isAssignableFrom(result.getClass()))
         {
-            Log.d("SERVICE CLASS", result.toString());
+
             this.jsonArray = (JSONArray) result;
 
             Log.d("Receive Json", jsonArray.toString());
@@ -64,32 +67,39 @@ public class ServiceClass {
 
     }
 
-    private JSONArray setJsonArray(JSONArray json)
+    public  List<String> setJsonArray(JSONArray json)
     {
+        List<String> stringList = new ArrayList<>();
         this.jsonArray = json;
-        return this.jsonArray;
+        Log.d("Set Json", jsonArray.toString());
+        for(int i =0; i<jsonArray.length(); i++)
+        {
+            try {
+                JSONObject jObj= jsonArray.getJSONObject(i);
+
+                Log.d("Object", jObj.toString());
+                Iterator<String> it = jObj.keys();
+                while(it.hasNext())
+                {
+                    String stringId = it.next();
+                    String value = jObj.get(stringId).toString();
+                    Log.d("String", stringId);
+                    Log.d("String", value);
+                    stringList.add(value);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return stringList;
     }
 
 
 
 
     public JSONArray getEvents() {
-//        FormGetAsync get = new FormGetAsync() {
-//            @Override
-//            public void receiveData(Object result) {
-//                Log.d("ServiceClass", "Does this happen?");
-//                recieveJSON(result);
-//
-//            }
-//
-//            @Override
-//            public void recieveData(Object object) {
-//                Log.d("ServiceClass", "Did this happen?");
-//                recieveJSON(object);
-//            }
-//        };
-//        get.execute();
-        Log.d("get events ", jsonArray.toString());
+        Log.d("get events ", this.jsonArray.toString());
         return this.jsonArray;
     }
 }

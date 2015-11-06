@@ -18,9 +18,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
+import java.util.List;
 
 public class EventView extends AppCompatActivity{
-
+    final ServiceClass serviceClass = new ServiceClass();
 
 
 
@@ -35,7 +36,7 @@ public class EventView extends AppCompatActivity{
         getBdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        final ServiceClass serviceClass = new ServiceClass();
+
                 FormGetAsync get = new FormGetAsync() {
                     @Override
                     public void receiveData(Object result) {
@@ -51,24 +52,8 @@ public class EventView extends AppCompatActivity{
                     }
                 };
                 get.execute();
-                JSONArray jsonArray = serviceClass.getEvents();
 
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    String object = "";
-                    try {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Iterator<String> it = jsonObject.keys();
-                        while (it.hasNext()) {
-                            String stringy = it.next();
-                            Toast.makeText(getApplicationContext(), object + ": " + stringy, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-
+                List<String> stringList = serviceClass.setJsonArray();
             }
         });
      }

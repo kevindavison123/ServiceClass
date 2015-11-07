@@ -10,30 +10,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Your Name"
+            android:hint="Event Title"
             android:ems="10"
-            android:id="@+id/yourName" />
+            android:id="@+id/title" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Group/Organization Name"
+            android:inputType="text"
+            android:hint="Event Location"
             android:ems="10"
-            android:id="@+id/groupName" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Subject"
-            android:ems="10"
-            android:id="@+id/subjectName" />
+            android:id="@+id/location" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,7 +58,7 @@
             android:inputType="textMultiLine"
             android:ems="10"
             android:hint="Give us more details!"
-            android:id="@+id/editText" />
+            android:id="@+id/description" />
 
 
         <ImageView
@@ -76,12 +67,22 @@
             android:id="@+id/imgView"
             />
         <Button
-            android:id="@+id/loadImageButton"
+            android:id="@+id/submitButton"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload Picture" />
+            android:text="Submit" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:hint="ID of Event to Delete"
+            android:id="@+id/deleteEventId" />
+
         <Button
-            android:id="@+id/submitButton"
+            android:id="@+id/deleteButton"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

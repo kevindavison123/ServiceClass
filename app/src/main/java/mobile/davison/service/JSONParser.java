@@ -37,6 +37,74 @@ public class JSONParser {
 
         }
 
+        public void postJSONObject(String url, JSONObject jObj) {
+            try {
+                urlObj = new URL(url);
+                conn = (HttpURLConnection) urlObj.openConnection();
+                conn.setDoOutput(true);
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                conn.connect();
+                wr = new DataOutputStream(conn.getOutputStream());
+                wr.writeBytes(jObj.toString());
+                wr.flush();
+                wr.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                //receive the response from the server
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    result.append(line);
+                }
+                Log.d("JSON Parser", "result: " + result.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            conn.disconnect();
+        }
+
+        public void deleteEvent(String url, int eventId) {
+            try {
+                urlObj = new URL(url + "/" + eventId);
+                conn = (HttpURLConnection) urlObj.openConnection();
+                conn.setDoOutput(true);
+                conn.setRequestMethod("DELETE");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                conn.connect();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                //receive the response from the server
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    result.append(line);
+                }
+                Log.d("JSON Parser", "result: " + result.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            conn.disconnect();
+        }
+
         public JSONObject makeHttpRequest(String url, String method, HashMap<String, String> params) {
             sbParams = new StringBuilder();
             int i = 0;
@@ -57,7 +125,7 @@ public class JSONParser {
                     conn = (HttpURLConnection) urlObj.openConnection();
                     conn.setDoOutput(true);
                     conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Accept-Charset", charset);
+                    conn.setRequestProperty("Content-Type", "application/json");
                     conn.setReadTimeout(10000);
                     conn.setConnectTimeout(15000);
                     conn.connect();

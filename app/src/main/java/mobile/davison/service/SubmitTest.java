@@ -1,75 +1,57 @@
 package mobile.davison.service;
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.IntentSender;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.database.DatabaseErrorHandler;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.UserHandle;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.Socket;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Random;
 
 public class SubmitTest extends AppCompatActivity {
-    Button buttonLoadImage;
     ImageView uploadImage;
     Button submitButton;
-    EditText groupName;
+    EditText titleText;
+    EditText descriptionText;
+    EditText locationText;
+    DatePicker dateBox;
+    TimePicker timeBox;
+
+    Button deleteButton;
+    EditText eventToDeleteIdText;
     private static int RESULT_LOAD_IMAGE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.setContext(this);
         Intent intent = getIntent();
         setContentView(R.layout.activity_submit_test);
-        groupName = (EditText) findViewById(R.id.groupName);
-        uploadImage = (ImageView) findViewById(R.id.imgView);
         submitButton = (Button) findViewById(R.id.submitButton);
-        buttonLoadImage =(Button) findViewById(R.id.loadImageButton);
-        buttonLoadImage.setOnClickListener(new View.OnClickListener() {
+        titleText = (EditText) findViewById(R.id.title);
+        descriptionText = (EditText) findViewById(R.id.description);
+        locationText = (EditText) findViewById(R.id.location);
+        dateBox = (DatePicker) findViewById(R.id.datePicker);
+        timeBox = (TimePicker) findViewById(R.id.timePicker);
+
+        deleteButton = (Button) findViewById(R.id.deleteButton);
+        eventToDeleteIdText = (EditText) findViewById(R.id.deleteEventId);
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -81,12 +63,20 @@ public class SubmitTest extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                Date date = new Date();
-                Bitmap image = ((BitmapDrawable) uploadImage.getDrawable()).getBitmap();
-                String name = groupName.getText().toString() + dateFormat.format(date);
-                    upload(image,name);
+                String title = titleText.getText().toString();
+                String description = descriptionText.getText().toString();
+                String location = locationText.getText().toString();
+                String date = dateBox.getYear() + "-" + dateBox.getMonth() + "-" + dateBox.getDayOfMonth();
+                String time = timeBox.getCurrentHour()+ ":" + timeBox.getCurrentMinute() + ":" + "00";
+                postEventToDatabase(title, description, location, date, time);
+            }
+        });
 
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void  onClick(View v) {
+                String eventId = eventToDeleteIdText.getText().toString();
+                deleteEventFromDatabase(eventId);
             }
         });
     }
@@ -125,6 +115,16 @@ public class SubmitTest extends AppCompatActivity {
         String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(),Base64.DEFAULT);
         imagePost.execute(encodedImage,name);
     }
+
+    private void postEventToDatabase(String title, String description, String location, String date, String time) {
+        new CreateEventPostAsync().execute("1", "foo/bar", description, title, location,
+                date, time);
+    }
+
+    private void deleteEventFromDatabase(String eventToDeleteId) {
+        new EventDeleteAsync().execute(eventToDeleteId);
+    }
+
     public void back()
     {
         Intent intent = new Intent(SubmitTest.this, Minimal.class);

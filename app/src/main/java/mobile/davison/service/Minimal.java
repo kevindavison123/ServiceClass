@@ -42,37 +42,38 @@ public class Minimal extends AppCompatActivity {
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent forget = new Intent(v.getContext(),Registration.class);
+                Intent forget = new Intent(v.getContext(), Registration.class);
             }
         });
 
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!uname.getText().toString().equals("") && !password.getText().toString().equals(""))
-                {
+                if (!uname.getText().toString().equals("") && !password.getText().toString().equals("")) {
                     LoginGetAsync get = new LoginGetAsync();
-                    get.execute(uname.getText().toString(),password.getText().toString());
+                    get.execute(uname.getText().toString(), password.getText().toString());
                 }
-                if(uname.getText().toString().equals("") && password.getText().toString().equals(""))
-                {
+                if (uname.getText().toString().equals("") && password.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), "Username and password fields are empty", Toast.LENGTH_SHORT).show();
                 }
-                if(uname.getText().toString().equals(""))
-                {
-                    Toast.makeText(getApplicationContext(),"Username field is empty", Toast.LENGTH_SHORT).show();
+                if (uname.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "Username field is empty", Toast.LENGTH_SHORT).show();
                 }
-                if(password.getText().toString().equals(""))
-                {
-                    Toast.makeText(getApplicationContext(),"Password field is empty", Toast.LENGTH_SHORT).show();
+                if (password.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "Password field is empty", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        //I'm just calling it automatically here rn. It should be called on a button press but one thing at a time
-        String username = "testuser";
-        String password = "testpass";
-        new LoginGetAsync().execute(username, password);
+        String authorId = "1";
+        String photoLocation = "home/Docs/pics";
+        String description = "cool things";
+        String title = "event number 1!!";
+        String location = "here";
+        String date = "2015-11-8";
+        String time = "12:45:00";
+        new CreateEventPostAsync().execute(authorId, photoLocation, description, title, location,
+                date, time);
     }
 
     @Override

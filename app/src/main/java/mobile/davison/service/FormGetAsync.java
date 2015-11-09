@@ -4,79 +4,88 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import com.loopj.android.http.*;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by Kevin on 10/28/2015.
+ *
  */
-public abstract class FormGetAsync extends AsyncTask<String, String, JSONArray> implements  CallbackReceiver{
-    Context context = App.getContext();
-    JSONArrayParser jsonParser = new JSONArrayParser();
-
-    private ProgressDialog pDialog;
-
+public class FormGetAsync {
     private static final String FORM_URL = "http://10.0.2.2:8080/";
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_MESSAGE = "message";
+    private  AsyncHttpClient client = new AsyncHttpClient();
+    private static Context context = App.getContext();
 
-public abstract void recieveData(Object object);
-    @Override
-    protected void onPreExecute() {
-//        pDialog = new ProgressDialog(context);
-//        pDialog.setMessage("Attempting login...");
-//        pDialog.setIndeterminate(false);
-//        pDialog.setCancelable(true);
-//        pDialog.show();
-    }
-
-    @Override
-    protected JSONArray doInBackground(String... args) {
-
-        try {
-            //THIS NEEDS TO BE CHANGED
-            HashMap<String, String> params = new HashMap<>();
-//            params.put("name", args[0]);
-//            params.put("group", args[1]);
-//            params.put("subject", args[2]);
-//            params.put("date", args[3]);
-//            params.put("time", args[4]);
-//            params.put("description", args[5]);
-
-            Log.d("request", "starting");
-
-            JSONArray json = jsonParser.makeHttpRequest(
-                    FORM_URL + "events/allevents", "GET", params);
+    public void get(final LinearLayout linearLayout, String url) {
+        String search = FORM_URL+url;
 
 
-            if (json != null) {
-                Log.d(" ASYNC TASK JSON result", json.toString());
-                receiveData(json);
-                return json;
+
+        client.get(search, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
+                Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
+
+                Toast.makeText(context, jsonObject.toString(), Toast.LENGTH_LONG).show();
+
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.d("JSON PARSER", "returned null");
-        return null;
+            public void onSuccess(int statusCode, Header[] headers, JSONArray jsonArray) {
+
+
+                for(int i = 0; i<jsonArray.length(); i++)
+                {
+                    try {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        Iterator<String> it = jsonObject.keys();
+                        String value = "";
+                        List<TextView> textViews = new ArrayList();
+                        while(it.hasNext())
+                        {
+                            String name = it.next();
+                            value = jsonObject.get(name).toString();
+                            TextView rowTextView = new TextView(context);
+                            rowTextView.setText(value);
+                            textViews.add(rowTextView);
+                            linearLayout.addView(rowTextView);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+                Log.d("omg android", jsonArray.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject error) {
+                Toast.makeText(context, "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray error) {
+                Toast.makeText(context, "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+        });
+
     }
-
-    protected void onPostExecute(JSONArray json) {
-
-
-//        if (pDialog != null && pDialog.isShowing()) {
-//            pDialog.dismiss();
-//        }
-
-        if (json != null) {
-
-        }
-    }
-
 }

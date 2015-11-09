@@ -1,7 +1,11 @@
 package mobile.davison.service;
 
+import android.content.Context;
 import android.telecom.Call;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +22,7 @@ import java.util.List;
 public class ServiceClass {
    private JSONArray jsonArray;
     private JSONObject jsonObject;
-
+    private Context context = App.getContext();
     public ServiceClass()
     {
 
@@ -50,6 +54,18 @@ public class ServiceClass {
     public void formPost(String... args) {
         FormPostAsync post = new FormPostAsync();
         post.execute(args);
+    }
+    public void formGetAll(LinearLayout linearLayout)
+    {
+        String url = "events/allevents";
+        FormGetAsync get = new FormGetAsync();
+        get.get(linearLayout,url);
+    }
+    public void formGetWeekly(LinearLayout linearLayout)
+    {
+        String url = "events/weeklyevents";
+        FormGetAsync get = new FormGetAsync();
+        get.get(linearLayout,url);
     }
 
 

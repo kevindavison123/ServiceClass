@@ -10,7 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -21,45 +24,43 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class EventView extends AppCompatActivity{
+public class EventView extends AppCompatActivity {
     final ServiceClass serviceClass = new ServiceClass();
-    private JSONArray jsonArray;
+    private LinearLayout linearLayout;
 
 
-
-
-    static final String[] EVENTS = new String[] {};
+    static final String[] EVENTS = new String[]{};
     Button getBdButton;
+    Button getWeeklyButton;
+    Button getDeleteButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.setContext(EventView.this);
         setContentView(R.layout.activity_event_view);
         getBdButton = (Button) findViewById(R.id.getDbevents);
-
+        getWeeklyButton = (Button) findViewById(R.id.getWeekly);
+        getDeleteButton = (Button) findViewById(R.id.deleteSomeone);
+        linearLayout = (LinearLayout) findViewById(R.id.linearText);
         getBdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                FormGetAsync get = new FormGetAsync() {
-                    @Override
-                    public void receiveData(Object result) {
-                        Log.d("ServiceClass", "Does this happen?");
-                         recieveJSON(result);
-
-                    }
-
-                    @Override
-                    public void recieveData(Object object) {
-                        Log.d("ServiceClass", "Did this happen?");
-                        recieveJSON(object);
-                    }
-                };
-                get.execute();
-
-                List<String> stringList = setJsonArray(jsonArray);
+                linearLayout.removeView(v);
+                serviceClass.formGetAll(linearLayout);
             }
+
         });
-     }
+        getWeeklyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayout.removeView(v);
+                serviceClass.formGetWeekly(linearLayout);
+            }
+
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,61 +84,5 @@ public class EventView extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    public void recieveJSON(Object result) {
-        Log.d("Event CLASS", "GET HERE");
-        if (JSONArray.class.isAssignableFrom(result.getClass()))
-        {
 
-            this.jsonArray = (JSONArray) result;
-
-            Log.d("Receive Json", jsonArray.toString());
-
-            setJsonArray(this.jsonArray);
-        }
-
-
-    }
-
-    public  List<String> setJsonArray(JSONArray json)
-    {
-        List<String> stringList = new ArrayList<>();
-        this.jsonArray = json;
-        Log.d(" Event class Set Json", jsonArray.toString());
-        for(int i =0; i<jsonArray.length(); i++)
-        {
-            try {
-                JSONObject jObj= jsonArray.getJSONObject(i);
-
-                Log.d("Object", jObj.toString());
-                Iterator<String> it = jObj.keys();
-                while(it.hasNext())
-                {
-                    String stringId = it.next();
-                    String value = jObj.get(stringId).toString();
-                    Log.d("String", stringId);
-                    Log.d("String", value);
-                    stringList.add(value);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return stringList;
-    }
-
-//    @Override
-//    public Loader onCreateLoader(int id, Bundle args) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader loader) {
-//
-//    }
-//
-//    @Override
-//    public void onLoadFinished(Loader loader, Object data) {
-//
-//    }
 }

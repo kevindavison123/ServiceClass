@@ -67,6 +67,29 @@ public class ServiceClass {
         FormGetAsync get = new FormGetAsync();
         get.get(linearLayout,url);
     }
+    public void postNewEvent(int authorId, String photoLocation, String description,
+                             String title, String location, String date, String time) {
+        String url = "events/create";
+        FormGetAsync async = new FormGetAsync();
 
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("authorId", authorId);
+            jsonObject.put("photoLocation", photoLocation);
+            jsonObject.put("description", description);
+            jsonObject.put("title", title);
+            jsonObject.put("location", location);
+            jsonObject.put("date", date);
+            jsonObject.put("time", time);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        async.postJSON(jsonObject, url);
+    }
+    public void deleteEvent(int eventId) {
+        String url = "events/delete";
+        FormGetAsync async = new FormGetAsync();
+        async.deleteEvent(eventId, url);
+    }
 
 }

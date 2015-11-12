@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,15 +22,45 @@ import java.util.List;
 import com.loopj.android.http.*;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 /**
  * Created by Kevin on 10/28/2015.
  *
  */
 public class FormGetAsync {
-    private static final String FORM_URL = "http://10.0.2.2:8080/";
+    private static final String FORM_URL = "http://10.0.3.2:8080/";
     private  AsyncHttpClient client = new AsyncHttpClient();
     private static Context context = App.getContext();
+
+    public void postJSON(JSONObject jsonObject, String url) {
+        String search = FORM_URL + url;
+
+        StringEntity entity = null;
+        try {
+            entity = new StringEntity(jsonObject.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        client.post(context, search, entity, "application/json", new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject object) {
+
+            }
+        });
+    }
+
+    public void deleteEvent(int eventId, String url) {
+        String search = FORM_URL + url + "/" + eventId;
+
+        client.delete(search, new JsonHttpResponseHandler() {
+
+        });
+
+    }
 
     public void get(final LinearLayout linearLayout, String url) {
         String search = FORM_URL+url;
